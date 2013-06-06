@@ -1,6 +1,5 @@
 <?php
 
-namespace register;
 /**
 * Register class
 * Usage: create object,call check

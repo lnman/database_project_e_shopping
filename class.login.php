@@ -1,20 +1,19 @@
 <?php
 
-namespace login;
+
 /**
 * 
 */
 class Login
 {
 	
-	function __construct(argument)
+	function __construct()
 	{
 		# code...
 	}
 
 	public static function log_in($user,$pass)
 	{
-		session_start();
 		require("databse_config.inc.php");
 		$pass=mysql_real_escape_string($pass);
 		$conn = oci_connect(db_user, db_pass,db_service);
@@ -31,7 +30,7 @@ class Login
 			oci_close($conn);
 			if($db_data['PASSWORD']==hash('sha256', $db_data['Salt'].hash('sha256', $pass)))
 			{
-				Login::validateUser($user);
+				self::validateUser($user);
 			}
 			else
 			{
@@ -43,7 +42,7 @@ class Login
 		else {exit ('DB Connection failed contact Administrator');}
 	} 
 
-	public static function validateUser($userid)
+	private static function validateUser($userid)
 	{
 	    session_regenerate_id (); 
 	    $_SESSION['valid'] = 1;
