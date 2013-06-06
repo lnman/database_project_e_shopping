@@ -14,7 +14,7 @@ class Login
 
 	public static function log_in($user,$pass)
 	{
-		require("databse_config.inc.php");
+		require("database_config.inc.php");
 		$pass=mysql_real_escape_string($pass);
 		$conn = oci_connect(db_user, db_pass,db_service);
 
@@ -24,17 +24,21 @@ class Login
 			oci_bind_by_name($query, ':uname', $user);
 			oci_execute($query);
 			if(oci_num_rows($query)<1){
-
+				unset($_SERVER['REQUEST_METHOD']);
+				header("Location: login.php");
+				die();
 			}
 			$db_data=oci_fetch_array($query);
 			oci_close($conn);
 			if($db_data['PASSWORD']==hash('sha256', $db_data['Salt'].hash('sha256', $pass)))
 			{
 				self::validateUser($user);
+				header('Location : index.php');
+				die();
 			}
 			else
 			{
-				header('Location : Login.html');
+				header('Location : login.php');
 				die();
 			}
 
@@ -59,6 +63,17 @@ class Login
 	public static function getUser()
 	{
 		return $_SESSION['userid'];
+	}
+
+	public static function show_error()
+	{
+		?>
+		<div class="row-fluid alert alert-error">
+      		<div class="span9 pagination-centered">
+      			<p>The password did not match</p>
+      		</div>
+      	</div>
+		<?php
 	}
 
 	public static function logout()

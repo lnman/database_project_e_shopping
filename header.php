@@ -17,13 +17,8 @@ class header
 	function show_header()
 	{
 		require_once 'class.login.php';
-		if(Login::isLoggedIn())
-		{
-
-		}
-		else {
-			?>
-			<!DOCTYPE html>
+		?>
+		<!DOCTYPE html>
 			<html>
 			  <head>
 			    <meta charset="utf-8">
@@ -41,30 +36,34 @@ class header
 			          
 			          <a class="brand" href="./index.html">E-shopping</a>
 			          <div class="nav-collapse collapse">
-			            <ul class="nav">
-			              <li class="">
-			                <a href="./index.php">Home</a>
-			              </li>
-			              <li class="">
-			                <a href="./register.html">Register</a>
-			              </li>
-			              <li class="active">
-			                <a href="./login.html">Login</a>
-			              </li>
-			              <li class="">
-			                <form class="navbar-search offset4">
-			                <input type="text" class="search-query" placeholder="Search">
-			              </form>
-			              </li>
+			          	<ul class="nav">
+			            
+		<?php
+		if(Login::isLoggedIn())
+		{
+
+		}
+		else {
+			$menus = array('index','register' ,'login');
+			foreach ($menus as $value) 
+			{
+				if(strcmp($_SERVER['PHP_SELF'],'/'.$value.'.php')==0)
+				{
+					echo '<li class="active">';
+				}else{echo '<li class="">';}
+				echo '<a href="./'.$value.'.php">'.$value.'</a></li>';
+			}
+		?>		
 			            </ul>
 			          </div>
 			        </div>
 			      </div>
-			    </div><?php
+			    </div>
+		<?php
 		}
 
 	}
-	function show_footer()
+	function show_footer($additional_script)
 	{
 		?>
 				<div class="navbar navbar-fixed-bottom">
@@ -80,6 +79,13 @@ class header
 			    <script src="js/jquery.js"></script>
 			    <script src="js/bootstrap.min.js"></script>
 			    <script src="js/jquery.validate.js"></script>
+		<?php
+		$add=preg_split("/[\s,]+/", $additional_script,-1,PREG_SPLIT_NO_EMPTY);
+		foreach ($add as $value) {
+			# code...
+			echo '<script src="js/'.$value.'"></script>';
+		}
+		?>
 			</body>
 		</html>
 		<?php

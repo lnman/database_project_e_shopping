@@ -1,45 +1,23 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Register</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
-  </head>
-  <body>
-    <div class="navbar navbar-inverse">
-      <div class="navbar-inner">
-        <div class="container">
-          
-          <a class="brand" href="./index.html">E-shopping</a>
-          <div class="nav-collapse collapse">
-            <ul class="nav">
-              <li class="">
-                <a href="./index.php">Home</a>
-              </li>
-              <li class="active">
-                <a href="./register.html">Register</a>
-              </li>
-              <li class="">
-                <a href="./login.html">Login</a>
-              </li>
-              <li class="">
-                <form class="navbar-search offset4">
-                <input type="text" class="search-query" placeholder="Search">
-              </form>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
+<?php
+$res="empty";
+if($_SERVER['REQUEST_METHOD']=='POST'&&isset($_POST['fname'])&&isset($_POST['lname'])&&isset($_POST['dob'])&&isset($_POST['email'])&&isset($_POST['phone'])&&isset($_POST['gender'])&&isset($_POST['user_type'])&&isset($_POST['sq'])&&isset($_POST['sa'])&&isset($_POST['uname'])&&isset($_POST['passwd'])&&isset($_POST['conpasswd']))
+{
+  require_once 'class.register.php';
+  $reg=new Register($_POST['uname'],$_POST['passwd'],$_POST['conpasswd'],$_POST['fname']." ".$_POST['lname'],$_POST['dob'],$_POST['gender'],$_POST['user_type'],$_POST['phone'],$_POST['email'],$_POST['sq'],$_POST['sa']);
+  $res=$reg->check_and_insert();
+  if($res=="Success"){die();}
+}
+require_once 'header.php';
+$head=new header();
+$head->show_header();
+if($res!=="empty"){
+  echo '<div class="row-fluid alert alert-error"><div class="span9 pagination-centered"><p>'.$res.'</p></div></div>';
+}
+?>
     <!--Code For Register -->
     <div class="row-fluid">
       <div class="span9 offset2">
-      <form id="signup" class="form-horizontal" method="post" action="#">
+      <form id="signup" class="form-horizontal" method="post">
     <legend>Sign Up</legend>
     <div class="control-group">
           <label class="control-label">First Name</label>
@@ -105,10 +83,10 @@
     <div class="control-group">
           <label class="control-label">User type</label>
       <div class="controls">
-          <select>
-            <option>Buyer</option>
-            <option>Seller</option>
-            <option>Advetiser</option>
+          <select name='user_type'>
+            <option value=1>Buyer</option>
+            <option value=2>Seller</option>
+            <option value=3>Advetiser</option>
           </select>
         </div>
       </div>
@@ -116,10 +94,8 @@
           <label class="control-label">Gender</label>
       <div class="controls">
 
-          <p><div id="gender" name="gender" class="btn-group" data-toggle="buttons-radio">
-                    <button type="button" class="btn btn-info">Male</button>
-                    <button type="button" class="btn btn-info">Female</button>
-                  </div></p>
+          <input type="radio" name="gender" value="M" >Male</input>
+          <input type="radio" name="gender" value="F" >Female</input>
       </div>
     </div>
     <div class="control-group">
@@ -157,38 +133,10 @@
 
         </div>
 
-  </div>
-
+      </div>
     </form>
       </div>
     </div>
-    <div class="navbar navbar-fixed-bottom">
-      <div class="span12 offset3">
-        <div class="span1"><a href="./index.php">Community</a></div>   
-        <div class="span1"><a href="./index.php">Security Center</a></div>
-        <div class="span1"><a href="./index.php">Policy</a></div>
-        <div class="span1"><a href="./index.php">Sitemap</a></div>
-        <div class="span1"><a href="./index.php">Contact Us</a></div>
-        <div class="span4"><a href="./index.php">Tell us what you think</a></div>
-      </div>
-    </div>
-    <script src="js/jquery.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.validate.js"></script>
-     <script type="text/javascript">
-     $(document).ready(function(){
-      $("#signup").validate({
-        rules:{
-          fname:"required",lname:"required",uname:"required",
-          dob:{required:true,date: true},sq:"required",sa:"required",
-          email:{required:true,email: true},
-          passwd:{required:true,minlength: 8},
-          conpasswd:{required:true,equalTo: "#passwd"},
-          gender:"required",phone:{digits: true,minlength: 8}
-        },
-        errorClass: "help-inline"
-      });
-    });
-</script>
-  </body>
-</html>
+<?php
+$head->show_footer("register_validate.js");
+?>
