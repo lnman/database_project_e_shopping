@@ -11,19 +11,28 @@ class header
 	{
 		# code...
 		session_start();
+
 	}
 
 
-	function show_header()
+	public function show_header($title)
 	{
 		require_once 'class.login.php';
+		if(Login::isLoggedIn()){
+			if(strcmp($_SERVER['PHP_SELF'],'/login.php')==0 or strcmp($_SERVER['PHP_SELF'],'/register.php')==0 )
+			{
+				header("Location: index.php");
+				die();
+			}
+		}
+		
 		?>
 		<!DOCTYPE html>
 			<html>
 			  <head>
 			    <meta charset="utf-8">
 			    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-			    <title>Login</title>
+			    <title><?php echo $title;?></title>
 			    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 			    <!-- Bootstrap -->
 			    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -41,18 +50,19 @@ class header
 		<?php
 		if(Login::isLoggedIn())
 		{
-
+			$menus = array('index','Notifications','','logout');
 		}
 		else {
 			$menus = array('index','register' ,'login');
-			foreach ($menus as $value) 
+		}
+		foreach ($menus as $value) 
+		{
+			if(strcmp($_SERVER['PHP_SELF'],'/'.$value.'.php')==0)
 			{
-				if(strcmp($_SERVER['PHP_SELF'],'/'.$value.'.php')==0)
-				{
-					echo '<li class="active">';
-				}else{echo '<li class="">';}
-				echo '<a href="./'.$value.'.php">'.$value.'</a></li>';
-			}
+				echo '<li class="active">';
+			}else{echo '<li class="">';}
+			echo '<a href="./'.$value.'.php">'.$value.'</a></li>';
+		}
 		?>		
 			            </ul>
 			          </div>
@@ -60,10 +70,9 @@ class header
 			      </div>
 			    </div>
 		<?php
-		}
 
 	}
-	function show_footer($additional_script)
+	public function show_footer($additional_script)
 	{
 		?>
 				<div class="navbar navbar-fixed-bottom">
@@ -91,7 +100,6 @@ class header
 		<?php
 
 	}
-
 
 }
 
