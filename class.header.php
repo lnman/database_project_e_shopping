@@ -21,7 +21,7 @@ class header
 		if(Login::isLoggedIn()){
 			if(strcmp($_SERVER['PHP_SELF'],'/login.php')==0 or strcmp($_SERVER['PHP_SELF'],'/register.php')==0 )
 			{
-				header("Location: index.php");
+				header("Location: home.php");
 				die();
 			}
 		}
@@ -48,20 +48,46 @@ class header
 			          	<ul class="nav">
 			            
 		<?php
+		$menus = array();
 		if(Login::isLoggedIn())
 		{
-			$menus = array('index','Notifications','','logout');
+			$menus = array('Home'=>'home');
 		}
 		else {
-			$menus = array('index','register' ,'login');
+			$menus = array('Home'=>'home','Register'=>'register' ,'Login'=>'login');
 		}
-		foreach ($menus as $value) 
+		foreach ($menus as $key => $value) 
 		{
 			if(strcmp($_SERVER['PHP_SELF'],'/'.$value.'.php')==0)
 			{
 				echo '<li class="active">';
 			}else{echo '<li class="">';}
-			echo '<a href="./'.$value.'.php">'.$value.'</a></li>';
+			echo '<a href="./'.$value.'.php">'.$key.'</a></li>';
+		}
+		if(Login::isLoggedIn()){
+			$user=Login::getUser();
+			$type=Login::getType();
+			$submenu;
+			if($type==1)
+			{
+				$submenu = array('Notification' =>'notification' ,'Bookmarks'=>'bookmarks','Booked Product'=>'booked_product','My Cart <img src="/img/cart.jpg"></img>'=>'cart','Log out'=>'logout' );
+			}else if($type==2){
+				$submenu = array();
+
+			}else if($type==3){
+				$submenu = array();
+
+			}else{
+				$submenu = array();
+			}
+			echo '</ul>'.'<ul class="nav pull-right">';
+			echo '<li class="dropdown">';
+			echo '<a href="#" class="dropdown-toggle" data-toggle="dropdown">'.$user.'<b class="caret"></b></a>';
+			echo '<ul class="dropdown-menu">';
+			foreach ($submenu as $key => $value) {
+				echo '<li class=""><a href="./'.$value.'.php">'.$key.'</a></li>';
+			}
+			echo '</ul></li>';
 		}
 		?>		
 			            </ul>

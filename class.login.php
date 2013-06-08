@@ -2,7 +2,9 @@
 
 
 /**
-* 
+* Login class
+* Most of the members are static
+* Originally need log_in and other get Methods
 */
 class Login
 {
@@ -29,7 +31,7 @@ class Login
 				if($db_data[0]==hash('sha256', $db_data[1].hash('sha256', $pass)))
 				{
 					self::validateUser($user,$db_data[2]);
-					header('Location: index.php');
+					header('Location: home.php');
 					die();
 				}
 				else

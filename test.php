@@ -1,6 +1,6 @@
 <?php
 
-require_once 'header.php';
+require_once 'class.header.php';
 
 $head=new header();
 $head->show_header("Test");

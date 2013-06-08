@@ -2,7 +2,7 @@
 
 /**
 * Register class
-* Usage: create object,call check
+* Usage: create object,call check_and_insert
 * check returns "Success" if inserted
 */
 class Register

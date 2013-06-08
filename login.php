@@ -7,7 +7,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'&&isset($_POST['uname'])&&isset($_POST['pas
 }
 else {
 	require_once 'class.login.php';
-	require_once 'header.php';
+	require_once 'class.header.php';
 	$head=new header();
 	$head->show_header('Login');
 	if(isset($_SERVER['HTTP_REFERER'])&&$_SERVER['HTTP_REFERER']=='http://localhost/login.php'){Login::show_error();}

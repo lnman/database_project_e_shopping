@@ -7,7 +7,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'&&isset($_POST['fname'])&&isset($_POST['lna
   $res=$reg->check_and_insert();
   if($res=="Success"){die();}
 }
-require_once 'header.php';
+require_once 'class.header.php';
 require_once 'class.register.php';
 $head=new header();
 $head->show_header('Register');
