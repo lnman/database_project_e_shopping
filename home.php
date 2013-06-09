@@ -8,6 +8,4 @@ $head->show_header("Home");
 $ho=new Home();
 $ho->show_home();
 $head->show_footer("");
-
-
 ?>

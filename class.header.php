@@ -101,7 +101,7 @@ class header
 	public function show_footer($additional_script)
 	{
 		?>
-				<div class="navbar navbar-fixed-bottom">
+				<div class="navbar navbar-bottom">
 			      <div class="span12 offset2">
 			        <div class="span1"><a href="./index.php">Community</a></div>   
 			        <div class="span1"><a href="./index.php">Security Center</a></div>

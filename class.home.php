@@ -147,9 +147,43 @@ class Home
             <a data-slide="next" href="#myCarousel" class="right carousel-control">›</a>
           </div>
 		</div>
+    <div class="span9">
+      <?php
+      $this->get_featured_product();
+      ?>
+    </div>
 		<?php
 
 	}
+
+
+  private function get_featured_product()
+  {
+    echo '<table class="table">';
+    require("database_config.inc.php");
+    $conn = oci_connect(db_user, db_pass,db_service);
+    if($conn) {
+      $q = 'SELECT dname,fname,iblob from pdm';
+      $query = oci_parse($conn, $q);
+      oci_execute($query);
+      $x=0;
+      while($db_data=oci_fetch_array($query)){
+        if($x!==0 and $x%3==0){echo '</tr>';}
+        if($x%3==0){echo '<tr>';}
+        $name=$db_data[0];
+        $price=$db_data[1];
+        $lob=$db_data[2]->load();
+        echo '<td><img style="height :500px;width: 300px;"src="data:image/jpeg;base64,'.base64_encode($lob).'" alt=""/>';
+        echo '<label>'.$name.'</label>'.'<label class="pull-left">'.$price.'</label></td>';
+        $x++;
+      }
+      if($x%3!==0){echo '</tr>';}
+      oci_close($conn);
+      echo '</table>';
+    }
+    else {exit ('DB Connection failed contact Administrator');}
+
+  }
 }
 
 
