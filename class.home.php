@@ -121,27 +121,24 @@ class Home
 		<div class="span9">
 			<div class="carousel slide carousel-fade" id="myCarousel">
             <div class="carousel-inner">
-              <div class="item">
-                <img alt="" src="./img/DeskWalls (4).jpg">
-                <div class="carousel-caption">
-                  <h4>First Thumbnail label</h4>
-                  <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                </div>
-              </div>
-              <div class="item active">
-                <img alt="" src="./img/DeskWalls (5).jpg">
-                <div class="carousel-caption">
-                  <h4>Second Thumbnail label</h4>
-                  <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                </div>
-              </div>
-              <div class="item">
-                <img alt="" src="./img/DeskWalls (6).jpg">
-                <div class="carousel-caption">
-                  <h4>Third Thumbnail label</h4>
-                  <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                </div>
-              </div>
+              <?php
+              $num=0;
+              $aa = array('DeskWalls (4)' => 'First Thumbnail label','DeskWalls (5)' => 'Second Thumbnail label','DeskWalls (6)' => 'Third Thumbnail label' );
+              $strings='Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.';
+              foreach ($aa as $key => $value) {
+                # code...
+                echo '<div class="item ';
+                if($num==1)echo 'active';
+                echo '">';
+                echo '<img alt="" src="./img/'.$key.'.jpg">';
+                echo '<div class="carousel-caption">';
+                echo '<h4>'.$value.'</h4>';
+                echo '<p>'.$strings.'</p>';
+                echo '</div>';
+                echo '</div>';
+                $num++;
+              }
+              ?>
             </div>
             <a data-slide="prev" href="#myCarousel" class="left carousel-control">‹</a>
             <a data-slide="next" href="#myCarousel" class="right carousel-control">›</a>
