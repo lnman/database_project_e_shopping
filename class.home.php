@@ -23,13 +23,13 @@ class Home
                     <?php
                     $sidemenu = array('People','Model','Electronics');
                     foreach ($sidemenu as $value) 
-            {
-              if(strcmp($_SERVER['PHP_SELF'],'/search.php?type='.$value)==0)
-              {
-                echo '<li class="active">';
-              }else{echo '<li class="">';}
-              echo '<a href="./search.php?type='.$value.'">'.$value.'</a></li>';
-            }
+                    {
+                      if(strcmp($_SERVER['PHP_SELF'],'/search.php?type='.$value)==0)
+                      {
+                        echo '<li class="active">';
+                      }else{echo '<li class="">';}
+                      echo '<a href="./search.php?type='.$value.'">'.$value.'</a></li>';
+                    }
                     ?>
                 </ul>
               </div>

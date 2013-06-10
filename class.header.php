@@ -37,6 +37,7 @@ class header
 			    <!-- Bootstrap -->
 			    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 			    <link href="css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+			    <link href="css/bootstrap-fileupload.min.css" rel="stylesheet" media="screen">
 			  </head>
 			  <body>
 			    <div class="navbar navbar-inverse">
@@ -70,15 +71,15 @@ class header
 			$submenu;
 			if($type==1)
 			{
-				$submenu = array('Notification' =>'notification' ,'Bookmarks'=>'bookmarks','Booked Product'=>'booked_product','My Cart <img src="/img/cart.jpg"></img>'=>'cart','Log out'=>'logout' );
+				$submenu = array('Notification' =>'notification' ,'Bookmarks'=>'bookmark','Booked Product'=>'booked_product','My Cart <img src="/img/cart.jpg"></img>'=>'cart','Log out'=>'logout' );
 			}else if($type==2){
-				$submenu = array();
+				$submenu = array('Notification' =>'notification' ,'Add product'=>'add_product','My product' =>'my_product' ,'Log out'=>'logout');
 
 			}else if($type==3){
-				$submenu = array();
+				$submenu = array('Add advertisement'=>'add_advertisement','My advertisement' =>'my_advertisement' ,'Log out'=>'logout');
 
 			}else{
-				$submenu = array();
+				$submenu = array('Notification' =>'notification','Report'=>'report' ,'View User List'=>'view_user','Log out'=>'logout');
 			}
 			echo '</ul>'.'<ul class="nav pull-right">';
 			echo '<li class="dropdown">';
@@ -113,7 +114,9 @@ class header
 			    </div>
 			    <script src="js/jquery.js"></script>
 			    <script src="js/bootstrap.min.js"></script>
+			    <script src="js/bootstrap-fileupload.min.js"></script>
 			    <script src="js/jquery.validate.js"></script>
+
 		<?php
 		$add=preg_split("/[\s,]+/", $additional_script,-1,PREG_SPLIT_NO_EMPTY);
 		foreach ($add as $value) {
