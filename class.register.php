@@ -70,7 +70,7 @@ class Register
 
 	private function check_db_and_insert()
 	{
-		require("database_config.inc.php");
+		require_once "database_config.inc.php";
 		$conn = oci_connect(db_user, db_pass,db_service);
 		if($conn) {
 			$q = 'SELECT count(*) from USER_List where Username=:Username or Phone_No=:Phone_No or Email=:Email';
@@ -107,6 +107,53 @@ class Register
 			oci_bind_by_name($query, ':Secret_A', $this->Secret_A);
 			oci_bind_by_name($query, ':Salt', $this->Salt);
 			oci_execute($query);
+
+      if($this->User_type==1)
+      {
+        $q = 'SELECT max(buyer_id) from buyer';
+        $query = oci_parse($conn, $q);
+        oci_execute($query);
+        $db_data=oci_fetch_array($query);
+        if(!$db_data)$db_data[0]=0;
+        $db_data[0]++;
+        $q='insert into buyer values (:aid,:auserid,0,0)';
+        $query = oci_parse($conn, $q);
+        oci_bind_by_name($query, ':auserid', $this->Username);
+        oci_bind_by_name($query, ':aid', $db_data[0]);
+        oci_execute($query);
+      }
+
+      if($this->User_type==2)
+      {
+        $q = 'SELECT max(seller_id) from seller';
+        $query = oci_parse($conn, $q);
+        oci_execute($query);
+        $db_data=oci_fetch_array($query);
+        if(!$db_data)$db_data[0]=0;
+        $db_data[0]++;
+        $q='insert into seller values (:aid,:auserid,0,0,0)';
+        $query = oci_parse($conn, $q);
+        oci_bind_by_name($query, ':auserid', $this->Username);
+        oci_bind_by_name($query, ':aid', $db_data[0]);
+        oci_execute($query);
+
+      }
+
+      if($this->User_type==3)
+      {
+        $q = 'SELECT max(advertiser_id) from advertiser';
+        $query = oci_parse($conn, $q);
+        oci_execute($query);
+        $db_data=oci_fetch_array($query);
+        if(!$db_data)$db_data[0]=0;
+        $db_data[0]++;
+        $q='insert into advertiser values (:aid,:auserid,0)';
+        $query = oci_parse($conn, $q);
+        oci_bind_by_name($query, ':auserid', $this->Username);
+        oci_bind_by_name($query, ':aid', $db_data[0]);
+        oci_execute($query);
+      }
+
 			oci_close($conn);
 			return "Success";
 		}
@@ -224,6 +271,8 @@ class Register
         <span class="add-on"><i class="icon-user"></i></span>
           <input type="text" class="input-xlarge" id="uname" name="uname" placeholder="Username">
         </div>
+        <button class="username_check btn">Check availability</button>
+        <label class='username_res'></label>
       </div>
     </div>
     <div class="control-group">

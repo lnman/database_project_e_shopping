@@ -53,7 +53,7 @@ class Home
                 <table class="table">
                   <tr>
                     <td class="control-group">
-                  <label class="control-label">User type</label>
+                  <label class="control-label">Product Age</label>
                   <div class="controls">
                       <select name='time'>
                         <?php
@@ -157,7 +157,7 @@ class Home
   private function get_featured_product()
   {
     echo '<table class="table">';
-    require("database_config.inc.php");
+    require_once "database_config.inc.php";
     $conn = oci_connect(db_user, db_pass,db_service);
     if($conn) {
       $q = 'SELECT dname,fname,iblob from pdm';

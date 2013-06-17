@@ -9,12 +9,12 @@ class Search
 	function __construct($keyword,$product_type,$time,$price_range,$manufacturer,$shipping_region)
 	{
 		# code...
-		if($keyword!=""){$this->keyword='%'.$keyword.'%';}
-		if($product_type!=""){$this->product_type=$product_type;}
-		if($time!=""){$this->time=$time;}
-		if($price_range!=""){$this->price_range=$price_range;}
-		if($manufacturer!=""){$this->manufacturer=$manufacturer;}
-		if($shipping_region!=""){$this->shipping_region=$shipping_region;}
+		if($keyword!=="")$this->keyword='%'.$keyword.'%';
+		if($product_type!=="")$this->product_type=$product_type;
+		if($time!==""){$this->time=$this->set_time($time);}
+		if($price_range!=="")$this->price_range=$price_range;
+		if($manufacturer!=="")$this->manufacturer=$manufacturer;
+		if($shipping_region!=="")$this->shipping_region=$shipping_region;
 	}
 
 
@@ -23,6 +23,18 @@ class Search
 		$this->searched=true;
 		$this->page=$value;
 	}
+
+	public function set_time($value)
+	{
+		$d=0;
+		if($value=='1 day Old') $d= mktime(0,0,0,date("m"),date("d")-1,date("Y"));
+		if($value=='1 week Old') $d= mktime(0,0,0,date("m"),date("d")-7,date("Y"));
+		if($value=='1 month Old') $d= mktime(0,0,0,date("m")-1,date("d"),date("Y"));
+		if($value=='6 month Old') $d= mktime(0,0,0,date("m")-6,date("d"),date("Y"));
+		return $d;
+	}
+
+
 	public function show_search_bar()
 	{
 		?>
@@ -66,7 +78,7 @@ class Search
 		            <table class="table">
 		            	<tr>
 			            	<td class="control-group">
-						      <label class="control-label">User type</label>
+						      <label class="control-label">Product Age</label>
 						      <div class="controls">
 						          <select name='time'>
 						            <?php
@@ -133,36 +145,36 @@ class Search
 	public function search($page=0)
 	{
 		echo '<table class="table">';
-	    require("database_config.inc.php");
+	    require_once "database_config.inc.php";
 	    $conn = oci_connect(db_user, db_pass,db_service);
 	    if($conn) {
-	      $q = 'SELECT dname,fname,iblob from pdm where fname like :keyword';
-	      /*if(isset($this->time))$q.='and add_date<:time';
-	      if(isset($this->price_range))$q.='and price>:from and price<:to';
-	      if(isset($this->manufacturer))$q.='and manufacturer=:manufacturer';
-	      if(isset($this->type))$q.='and type=:product_type';
-	      if(isset($this->shipping_region))$q.='and region=:shipping_region';*/
+	      $q = 'SELECT name,price,pic_1,id from product where name like :akeyword ';
+	      if(isset($this->time))$q.='and adate<:atime ';
+	      if(isset($this->price_range))$q.='and price>:afrom and price<:ato ';
+	      if(isset($this->manufacturer))$q.='and manufacturer=:amanufacturer ';
+	      if(isset($this->type))$q.='and category=:aproduct_type ';
+	      /*if(isset($this->shipping_region))$q.='and region=:shipping_region';*/
 	      $query = oci_parse($conn, $q);
-	      oci_bind_by_name($query, ':keyword', $this->keyword);
-	      /*if(isset($this->time))oci_bind_by_name($query, ':time', $this->time);
-	      if(isset($this->price_range)){oci_bind_by_name($query, ':from', $this->price_range[0]);oci_bind_by_name($query, ':to', $this->price_range[1]);}
-	      if(isset($this->manufacturer))oci_bind_by_name($query, ':manufacturer', $this->manufacturer);
-	      if(isset($this->type))oci_bind_by_name($query, ':product_type', $this->product_type);
-	      if(isset($this->shipping_region))oci_bind_by_name($query, ':shipping_region', $this->shipping_region);*/
+	      oci_bind_by_name($query, ':akeyword', $this->keyword);
+	      if(isset($this->time))oci_bind_by_name($query, ':atime', $this->time);
+	      if(isset($this->price_range)){oci_bind_by_name($query, ':afrom', $this->price_range[0]);oci_bind_by_name($query, ':ato', $this->price_range[1]);}
+	      if(isset($this->manufacturer))oci_bind_by_name($query, ':amanufacturer', $this->manufacturer);
+	      if(isset($this->type))oci_bind_by_name($query, ':aproduct_type', $this->product_type);
+	      /*if(isset($this->shipping_region))oci_bind_by_name($query, ':shipping_region', $this->shipping_region);*/
 	      oci_execute($query);
 	      $x=0+20*$page;
 	      $pp=0;
 	      while($pp<$x&&$db_data=oci_fetch_array($query)){$pp++;}
 	      $beau=0;
-	      while($db_data=oci_fetch_array($query)){
+	      while($pp<=$x&&$db_data=oci_fetch_array($query)){
 	        if($beau!==0 and $beau%3==0){echo '</tr>';}
 	        if($beau%3==0){echo '<tr>';}
 	        $name=$db_data[0];
 	        $price=$db_data[1];
 	        $lob=$db_data[2]->load();
 	        echo '<td><img style="height :500px;width: 300px;"src="data:image/jpeg;base64,'.base64_encode($lob).'" alt=""/>';
-	        echo '<label>'.$name.'</label>'.'<label class="pull-left">'.$price.'</label></td>';
-	        $pp++;
+	        echo '<a href="product_view.php?id='.$db_data[3].'"><label>'.$name.'</label>'.'<label class="pull-left">'.$price.'</label></a></td>';
+	        $x++;
 	        $beau++;
 	        if($pp>$x+20)break;
 	      }

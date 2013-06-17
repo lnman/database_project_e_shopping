@@ -18,6 +18,20 @@ class Login
 	public static function log_in($user,$pass)
 	{
 		session_start();
+		if($user=='Admin')
+		{
+			require_once 'class.admin_config.php';
+			if($pass==Admin_Password)
+			{
+				self::validateUser($user,10);
+				header('Location: home.php');
+				die();
+			}
+			else{
+				header('Location: login.php');
+				die();
+			}
+		}
 		require("database_config.inc.php");
 		$pass=mysql_real_escape_string($pass);
 		$conn = oci_connect(db_user, db_pass,db_service);

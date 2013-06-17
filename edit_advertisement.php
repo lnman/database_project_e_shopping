@@ -28,7 +28,7 @@ if(Login::isLoggedIn()&&Login::getType()==3)
 	}
 	else{
 	$ad->show_edit_advertisement($_POST['id']);
-	$head->show_footer("");}
+	$head->show_footer("advertisement_validate.js");}
 }
 else
 {

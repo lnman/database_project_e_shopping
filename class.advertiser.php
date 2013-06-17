@@ -47,6 +47,7 @@ class advertiser
 			$query = oci_parse($conn, $q);
 			oci_execute($query);
 			$db_data=oci_fetch_array($query);
+			if(!$db_data)$db_data[0]=0;
 			$db_data[0]=$db_data[0]+1;
 	    	$q = "INSERT INTO advertisement VALUES(:id,:name,:description,:tags,:userid,empty_blob()) RETURNING image INTO :image";
 			$query = oci_parse($conn, $q);

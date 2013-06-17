@@ -10,8 +10,22 @@
         },
         errorClass: "help-inline"
       });
-      $("#gender > button").click(function(){
-        $("#gender").value=this.value;
+      $('.username_check').click(function()
+      {
+        var x=$('#uname').attr("value");
+        $.ajax({
+            url: "check_username.php",
+            type:"post",
+            data:{uname:x},
+            success: function(data){
+              if(data=='found')
+              {
+                alert('exists');
+              }else alert('Ok!:)');
+            },
+            error:function(){
+                alert("failed to check");
+            }   
+          });
       });
-
     });
