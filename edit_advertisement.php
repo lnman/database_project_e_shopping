@@ -24,6 +24,14 @@ if(Login::isLoggedIn()&&Login::getType()==3)
 			fclose($fp);
 		}
 		$ad->update_advertisement($_POST['id'],$name,$desc,$tag,$content);
+		?>
+		<div class='row-fluid'>
+		<div class='span6 offset3'>
+			<img src='./img/done.jpg'>
+		</div>
+		</div>
+		<?php
+		$head->show_footer("");
 		die();
 	}
 	else{

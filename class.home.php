@@ -21,14 +21,14 @@ class Home
                 <ul class="nav nav-list">
                   <li class="nav-header">Top Categories</li>
                     <?php
-                    $sidemenu = array('People','Model','Electronics');
-                    foreach ($sidemenu as $value) 
+                    $sidemenu = array('People'=>1,'Model'=>2,'Accesories'=>3,'Home Decor'=>4,'Electronics'=>5,'Entertainment'=>6,'Art'=>7,'Jewelry'=>8);
+                    foreach ($sidemenu as $key => $value) 
                     {
                       if(strcmp($_SERVER['PHP_SELF'],'/search.php?type='.$value)==0)
                       {
                         echo '<li class="active">';
                       }else{echo '<li class="">';}
-                      echo '<a href="./search.php?type='.$value.'">'.$value.'</a></li>';
+                      echo '<a href="./search.php?type='.$value.'">'.$key.'</a></li>';
                     }
                     ?>
                 </ul>
@@ -40,9 +40,9 @@ class Home
                     <div class='input-prepend'>
                         <select>
                           <?php
-                          $category = array('All Category','People','Model','Electronics');
-                          foreach ($category as $value) {
-                            echo '<option>'.$value.'</option>';
+                          $category = array('People'=>1,'Model'=>2,'Accesories'=>3,'Home Decor'=>4,'Electronics'=>5,'Entertainment'=>6,'Art'=>7,'Jewelry'=>8);
+                          foreach ($category as $key=>$value) {
+                            echo '<option value='.$value.'>'.$key.'</option>';
                           }
                           ?>
                         </select>
@@ -53,7 +53,7 @@ class Home
                 <table class="table">
                   <tr>
                     <td class="control-group">
-                  <label class="control-label">User type</label>
+                  <label class="control-label">Product Age</label>
                   <div class="controls">
                       <select name='time'>
                         <?php
@@ -118,13 +118,13 @@ class Home
 	private function home()
 	{
 		?>
-		<div class="span9">
+		<div class="span12">
 			<div class="carousel slide carousel-fade" id="myCarousel">
             <div class="carousel-inner">
               <?php
               $num=0;
-              $aa = array('DeskWalls (4)' => 'First Thumbnail label','DeskWalls (5)' => 'Second Thumbnail label','DeskWalls (6)' => 'Third Thumbnail label' );
-              $strings='Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.';
+              $aa = array('feature_1' => 'First Thumbnail label','feature_2' => 'Second Thumbnail label','feature_3' => 'Third Thumbnail label' );
+              $strings='We just launched this site with some cool features. Hope you like it.And We are open to suggestions.';
               foreach ($aa as $key => $value) {
                 # code...
                 echo '<div class="item ';
@@ -144,7 +144,7 @@ class Home
             <a data-slide="next" href="#myCarousel" class="right carousel-control">›</a>
           </div>
 		</div>
-    <div class="span9">
+    <div class="span12">
       <?php
       $this->get_featured_product();
       ?>
@@ -156,26 +156,19 @@ class Home
 
   private function get_featured_product()
   {
-    echo '<table class="table">';
-    require("database_config.inc.php");
-    $conn = oci_connect(db_user, db_pass,db_service);
-    if($conn) {
-      $q = 'SELECT dname,fname,iblob from pdm';
-      $query = oci_parse($conn, $q);
-      oci_execute($query);
-      $x=0;
-      while($db_data=oci_fetch_array($query)){
-        if($x!==0 and $x%3==0){echo '</tr>';}
-        if($x%3==0){echo '<tr>';}
-        $name=$db_data[0];
-        $price=$db_data[1];
-        $lob=$db_data[2]->load();
-        echo '<td><img style="height :500px;width: 300px;"src="data:image/jpeg;base64,'.base64_encode($lob).'" alt=""/>';
-        echo '<label>'.$name.'</label>'.'<label class="pull-left">'.$price.'</label></td>';
+    echo '<table class="table"><legend><strong>Featured Product</strong></legend>';
+    $name=array('','','','','','','','','','','','','','','');
+    $price=array('','','','','',130,130,130,130,100,100,100,70);
+    if(true) {
+      $x=4;
+      while($x<12){
+        if($x!==4 and $x%4==0){echo '</tr>';}
+        if($x%4==0){echo '<tr>';}
         $x++;
+        echo '<td><a href="index.php"><img style="height :500px;width: 300px;"src="img/product_'.$x.'.png" alt=""/>';
+        echo '<label>'.$name[$x].'</label>'.'<label class="pull-left">'.$price[$x].'$</label></a></td>';
       }
-      if($x%3!==0){echo '</tr>';}
-      oci_close($conn);
+      if($x%4!==0){echo '</tr>';}
       echo '</table>';
     }
     else {exit ('DB Connection failed contact Administrator');}

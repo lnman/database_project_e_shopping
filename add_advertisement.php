@@ -18,10 +18,18 @@ if(Login::isLoggedIn()&&Login::getType()==3)
 		$content = fread($fp, filesize($tmpName));
 		fclose($fp);
 		$ad->add_advertisement($_POST['name'],$_POST['desc'],$_POST['tag'],$content);
+		?>
+		<div class='row-fluid'>
+		<div class='span6 offset3'>
+			<img src='./img/done.jpg'>
+		</div>
+		</div>
+		<?php
+		$head->show_footer("");
 	}
 	else{
 	$ad->show_add_advertisement();
-	$head->show_footer("");}
+	$head->show_footer("advertisement_validate.js");}
 }
 else
 {
