@@ -5,7 +5,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'&&isset($_POST['fname'])&&isset($_POST['lna
   require_once 'class.register.php';
   $reg=new Register($_POST['uname'],$_POST['passwd'],$_POST['conpasswd'],$_POST['fname']." ".$_POST['lname'],$_POST['dob'],$_POST['gender'],$_POST['user_type'],$_POST['phone'],$_POST['email'],$_POST['sq'],$_POST['sa']);
   $res=$reg->check_and_insert();
-  if($res=="Success"){ header('Location: login.php'); die();}
+  if($res=="Success"){die();}
 }
 require_once 'class.header.php';
 require_once 'class.register.php';

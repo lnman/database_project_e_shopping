@@ -14,35 +14,6 @@ class header
 
 	}
 
-	public function has_notification($id,$type)
-	{
-		# code...
-		require_once "database_config.inc.php";
-		$conn = oci_connect(db_user, db_pass,db_service);
-		if($conn) {
-			$q = 'SELECT last_not from ';
-			if($type==1)$q.=' buyer ';
-			if($type==2)$q.=' seller ';
-			if($type==3)$q.=' advertiser ';
-			$q.=' where userid=:auserid';
-	        $query = oci_parse($conn, $q);
-	        oci_bind_by_name($query, ':auserid', $id);
-	        oci_execute($query);
-	        $db_data=oci_fetch_array($query);
-	        $prev=$db_data[0];
-
-	        $q = 'SELECT max(Notific_id) from notifications  where userid=:auserid';
-	        $query = oci_parse($conn, $q);
-	        oci_bind_by_name($query, ':auserid', $id);
-	        oci_execute($query);
-	        $db_data=oci_fetch_array($query);
-	        if(!$db_data)$db_data[0]=0;
-	        $new=$db_data[0];
-	        oci_close($conn);
-	        if($prev<$new)return true;
-	        else return false;
-		}
-	}
 
 	public function show_header($title)
 	{
@@ -81,11 +52,7 @@ class header
 		$menus = array();
 		if(Login::isLoggedIn())
 		{
-			if(Login::getUser()!=='Admin' && $this->has_notification(Login::getUser(),Login::getType()))
-			{
-				$menus = array('Home'=>'home','Notification<img src="./img/new_icon.jpg" style="height :20px;width: 50px;">' =>'notification');
-			}
-			else $menus = array('Home'=>'home','Notification' =>'notification');
+			$menus = array('Home'=>'home');
 		}
 		else {
 			$menus = array('Home'=>'home','Register'=>'register' ,'Login'=>'login');
@@ -104,15 +71,15 @@ class header
 			$submenu;
 			if($type==1)
 			{
-				$submenu = array('Bookmarks'=>'bookmark','Booked Product'=>'booked_product','My Cart <img src="/img/cart.jpg"></img><label id="change"/>'=>'cart','check out'=>'check_out','Log out'=>'logout' );
+				$submenu = array('Notification' =>'notification' ,'Bookmarks'=>'bookmark','Booked Product'=>'booked_product','My Cart <img src="/img/cart.jpg"></img>'=>'cart','Log out'=>'logout' );
 			}else if($type==2){
-				$submenu = array('Add product'=>'add_product','My product' =>'my_product' ,'Log out'=>'logout');
+				$submenu = array('Notification' =>'notification' ,'Add product'=>'add_product','My product' =>'my_product' ,'Log out'=>'logout');
 
 			}else if($type==3){
 				$submenu = array('Add advertisement'=>'add_advertisement','My advertisement' =>'my_advertisement' ,'Log out'=>'logout');
 
 			}else{
-				$submenu = array('Report'=>'report' ,'View User List'=>'view_user','Log out'=>'logout');
+				$submenu = array('Notification' =>'notification','Report'=>'report' ,'View User List'=>'view_user','Log out'=>'logout');
 			}
 			echo '</ul>'.'<ul class="nav pull-right">';
 			echo '<li class="dropdown">';
@@ -147,7 +114,6 @@ class header
 			    </div>
 			    <script src="js/jquery.js"></script>
 			    <script src="js/bootstrap.min.js"></script>
-			    <script src="js/bootstrap-carousel.js"></script>
 			    <script src="js/bootstrap-fileupload.min.js"></script>
 			    <script src="js/jquery.validate.js"></script>
 
